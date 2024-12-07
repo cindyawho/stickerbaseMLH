@@ -1,11 +1,20 @@
 import React, {useState} from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
+    // const [isLoggedIn, setIsLoggedIn] = useState(true);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
-    function handleSubmit(value) {
-        console.log(value);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if(username === 'user' && password === 'password'){
+            localStorage.setItem('isLoggedIn', true);
+            navigate('/dashboard');
+        } else {
+            alert('Invalid username or password');
+        }
     }
 
     return (
@@ -27,6 +36,7 @@ const Login = () => {
                     onChange = {(e) => setPassword(e.target.value)}
                     required
                 /> 
+                <br />
                 <button type='submit'>Login</button>
             </form>
         </div>
