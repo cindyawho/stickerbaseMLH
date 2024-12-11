@@ -6,6 +6,13 @@ const Dashboard = () => {
     const [images, setImages] = useState([]);
     const [isModalOpen, setModalOpen] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setImages([
+            {id: 1, src: 'https://via.placeholder.com/150', metadata: 'Image 1'},
+            {id: 2, src: 'https://via.placeholder.com/150', metadata: 'Image 2'},
+        ]);
+    }, []);
     
     useEffect(() => {
         const isLoggedIn = localStorage.getItem('isLoggedIn');
@@ -13,6 +20,24 @@ const Dashboard = () => {
             navigate('/');
         }
     }, []);
+
+    // useEffect(() => {
+    //     const loadImages = async () => {
+    //         try {
+    //             const fetchedImages = await fetchImages();
+    //             setImages(fetchedImages);
+    //         }
+    //         catch(err) {
+    //             console.error('Error fetching images:', err);
+    //         }
+    //     };
+    //     loadImages();
+    // })
+
+    const handleSaveImage = (croppedImage) => {
+        setImages([...images, {id: images.length+1, croppedImage, metadata: 'Custom metadata'}]);
+    }
+
     return (
         <div>
             <h1>Dashboard</h1>
@@ -25,7 +50,7 @@ const Dashboard = () => {
                     </div>
                 ))}
             </div>
-            {isModalOpen && (<UploadModal onClose={() => setModalOpen(false)}/>)}
+            {isModalOpen && (<UploadModal onClose={() => setModalOpen(false)} onSave={handleSaveImage}/>)}
         </div>
     )
 }

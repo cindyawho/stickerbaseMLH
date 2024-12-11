@@ -1,9 +1,9 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import Cropper from 'react-easy-crop';
 import {getCroppedImg} from '../utils/cropImage';
 
 const UploadModal = ({onClose}) => {
-    const [image, setImage] = useState(null);
+    const [image, setImages] = useState(null);
     const [crop, setCrop] = useState({ x: 0, y: 0});
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
@@ -13,7 +13,7 @@ const UploadModal = ({onClose}) => {
         if(file) {
             const reader = new FileReader();
             reader.onload = () => {
-                setImage(reader.result);
+                setImages(reader.result);
             };
             reader.readAsDataURL(file);
         }
