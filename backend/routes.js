@@ -23,7 +23,20 @@ const upload = multer({storage});
 const images = [];
 
 router.post('/upload', upload.single('image'), (req, res) => {
-    res.json(images);
+    const { file } = req;
+    const { metadata } = req.body;
+
+    if(!file) {
+        return res.status(400).json({message: 'Please upload an image'});
+    }
+
+    const imageData = {
+        id: images.length+1,
+        src: 'https://localhost:5000/${file.name}', // TO DO: Replace 5000 with port, fix filename
+        metadata,
+    };
+    images.push(imageData);
+    res.status(200).json(imageData);
 });
 
 router.get('/images', (req, res) => {
