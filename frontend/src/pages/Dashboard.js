@@ -1,18 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import UploadModal from '../components/UploadModal';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import { fetchImages } from '../utils/api'
 
 const Dashboard = () => {
     const [images, setImages] = useState([]);
     const [isModalOpen, setModalOpen] = useState(false);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        setImages([
-            {id: 1, src: 'https://via.placeholder.com/150', metadata: 'Image 1'},
-            {id: 2, src: 'https://via.placeholder.com/150', metadata: 'Image 2'},
-        ]);
-    }, []);
+    // PLACEHOLDER DUMMY CONTENT replaced by load images below
+    // useEffect(() => {
+    //     setImages([
+    //         {id: 1, src: 'https://via.placeholder.com/150', metadata: 'Image 1'},
+    //         {id: 2, src: 'https://via.placeholder.com/150', metadata: 'Image 2'},
+    //     ]);
+    // }, []);
     
     useEffect(() => {
         const isLoggedIn = localStorage.getItem('isLoggedIn');
@@ -21,18 +23,18 @@ const Dashboard = () => {
         }
     }, []);
 
-    // useEffect(() => {
-    //     const loadImages = async () => {
-    //         try {
-    //             const fetchedImages = await fetchImages();
-    //             setImages(fetchedImages);
-    //         }
-    //         catch(err) {
-    //             console.error('Error fetching images:', err);
-    //         }
-    //     };
-    //     loadImages();
-    // })
+    useEffect(() => {
+        const loadImages = async () => {
+            try {
+                const fetchedImages = await fetchImages();
+                setImages(fetchedImages);
+            }
+            catch(err) {
+                console.error('Error fetching images:', err);
+            }
+        };
+        loadImages();
+    })
 
     const handleSaveImage = (croppedImage) => {
         setImages([...images, {id: images.length+1, croppedImage, metadata: 'Custom metadata'}]);

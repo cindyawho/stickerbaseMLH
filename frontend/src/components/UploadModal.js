@@ -1,8 +1,9 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import Cropper from 'react-easy-crop';
-import {getCroppedImg} from '../utils/cropImage';
+import { getCroppedImg } from '../utils/cropImage';
+import { uploadImage } from '../utils/api';
 
-const UploadModal = ({onClose}) => {
+const UploadModal = ({onClose, onSave}) => {
     const [image, setImages] = useState(null);
     const [crop, setCrop] = useState({ x: 0, y: 0});
     const [zoom, setZoom] = useState(1);
@@ -13,6 +14,7 @@ const UploadModal = ({onClose}) => {
         if(file) {
             const reader = new FileReader();
             reader.onload = () => {
+                // console.log('Image loaded:', reader.result); // Debug log
                 setImages(reader.result);
             };
             reader.readAsDataURL(file);
@@ -30,8 +32,8 @@ const UploadModal = ({onClose}) => {
             formData.append('image', croppedImage, 'cropped-image.jpg');
             formData.append('metadata', 'Custom metadata');
             
-            // const uploadedImage = await uploadImage(formData);
-            // onmouseleave(uploadedImage);
+            const uploadedImage = await uploadImage(formData);
+            onSave(uploadedImage);
             onClose();
         } catch (err) {
             console.error('Error cropping image: ', err);
